@@ -77,12 +77,46 @@ app.MapGet("/api/profiles", () => Results.Ok(profiles));
 
 // GET /api/profiles/{id} - return a single profile, or 404 if the Id is unknown.
 //AI HELPED ME with this since I could not figure out how to do selections
+//CURRENTLY DONT USE THIS
 app.MapGet("/api/profiles/{id:int}", (int id) =>
 {
     var profile = profiles.FirstOrDefault(p => p.Id == id);
     return profile is not null ? Results.Ok(profile) : Results.NotFound();
 });
 
+// PUT /api/profiles/{id} - This is for Overwriting
+app.MapPut("/api/profiles/{id:int}", (int id, SensitivityProfile input) =>
+{
+    var profile = profiles.FirstOrDefault(p => p.Id == id);
+    if (profile is null)
+    {
+        return Results.NotFound();
+    }
+
+    profile.GameName = input.GameName;
+    profile.FieldOfView = input.FieldOfView;
+    profile.MouseDPI = input.MouseDPI;
+    profile.InGameSensitivity = input.InGameSensitivity;
+    profile.CmPer360 = input.CmPer360;
+    profile.Notes = input.Notes;
+
+    return Results.Ok(profile);
+});
+
+// DELETE /api/profiles/{id} - remove a profile. 404 if the Id doesn't exist
+app.MapDelete("/api/profiles/{id:int}", (int id) =>
+{
+    var profile = profiles.FirstOrDefault(p => p.Id == id);
+    if (profile is null)
+    {
+        return Results.NotFound();
+    }
+
+    profiles.Remove(profile);
+    return Results.NoContent();
+});
+
+app.Run();
 
 // the "profiles" list is full of these objects
 // Public so the xUnit test project can work with this
@@ -98,4 +132,6 @@ public class SensitivityProfile
 }
 
 
-
+//need this statement so that my unit tests can see this to test it
+public partial class Program { }
+//ai helped me with this as well
