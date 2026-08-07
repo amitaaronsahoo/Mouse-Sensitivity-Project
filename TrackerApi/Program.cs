@@ -8,7 +8,6 @@ builder.Services.AddCors(options =>{
     options.AddPolicy("AllowAll", policy =>{policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();});
 });
 //this is just the configuration I need for the api object named builder
-
 //DONT CURRENTLY HAVE A STATIC WEBSITE SO WILL ALLOW ALL ORIGINS
 
 //added CORS configuration to let the frontend access the API that I am creating
@@ -72,10 +71,9 @@ app.MapPost("/api/profiles", (SensitivityProfile input) =>  //the json that gets
 });
 
 // GET /api/profiles - return every stored profile. NEED THIS FOR THE FRONT END TO SHOW ALL PROFILES
-app.MapGet("/api/profiles", () => Results.Ok(profiles));
+app.MapGet("/api/profiles", () => Results.Ok(profiles)); //LINQ is used here, AI Helped me with this
+//just a lambda function that either returns the searched item or null, which is used for the 404 not found response
 
-
-// GET /api/profiles/{id} - return a single profile, or 404 if the Id is unknown.
 //AI HELPED ME with this since I could not figure out how to do selections
 //CURRENTLY DONT USE THIS
 app.MapGet("/api/profiles/{id:int}", (int id) =>
@@ -85,9 +83,9 @@ app.MapGet("/api/profiles/{id:int}", (int id) =>
 });
 
 // PUT /api/profiles/{id} - This is for Overwriting
-app.MapPut("/api/profiles/{id:int}", (int id, SensitivityProfile input) =>
+app.MapPut("/api/profiles/{id:int}", (int id, SensitivityProfile input) => 
 {
-    var profile = profiles.FirstOrDefault(p => p.Id == id);
+    var profile = profiles.FirstOrDefault(p => p.Id == id); //LINQ is also used here
     if (profile is null)
     {
         return Results.NotFound();
@@ -106,7 +104,7 @@ app.MapPut("/api/profiles/{id:int}", (int id, SensitivityProfile input) =>
 // DELETE /api/profiles/{id} - remove a profile. 404 if the Id doesn't exist
 app.MapDelete("/api/profiles/{id:int}", (int id) =>
 {
-    var profile = profiles.FirstOrDefault(p => p.Id == id);
+    var profile = profiles.FirstOrDefault(p => p.Id == id); //LINQ is used here
     if (profile is null)
     {
         return Results.NotFound();
@@ -116,6 +114,7 @@ app.MapDelete("/api/profiles/{id:int}", (int id) =>
     return Results.NoContent();
 });
 
+//run this now
 app.Run();
 
 // the "profiles" list is full of these objects
