@@ -51,11 +51,11 @@ var profiles = new List<SensitivityProfile>
 var nextId = profiles.Count + 1;
 
 // THIS IS WHAT HAPPENS WHEN SOMETHING SENDS POST
-app.MapPost("/api/profiles", (SensitivityProfile input) =>  //git 
+app.MapPost("/api/profiles", (SensitivityProfile input) =>  //the json that gets sent in POST is put into the SensitivityProfile object 
 {
     var profile = new SensitivityProfile
     {
-        Id = nextId++,
+        Id = nextId++,  //how we add to the list above with id
         GameName = input.GameName,
         FieldOfView = input.FieldOfView,
         MouseDPI = input.MouseDPI,
@@ -64,12 +64,24 @@ app.MapPost("/api/profiles", (SensitivityProfile input) =>  //git
         Notes = input.Notes
     };
 
-    profiles.Add(profile);
+    profiles.Add(profile); //save this to the list
 
-    // 201 Created + Location header pointing at GET /api/profiles/{id}.
+   //AI Helped me come up with this response message after every post
+   //this is just helping the frint end know that the new resource will be at /api/profiles/{id}
     return Results.Created($"/api/profiles/{profile.Id}", profile);
 });
 
+// GET /api/profiles - return every stored profile. NEED THIS FOR THE FRONT END TO SHOW ALL PROFILES
+app.MapGet("/api/profiles", () => Results.Ok(profiles));
+
+
+// GET /api/profiles/{id} - return a single profile, or 404 if the Id is unknown.
+//AI HELPED ME with this since I could not figure out how to do selections
+app.MapGet("/api/profiles/{id:int}", (int id) =>
+{
+    var profile = profiles.FirstOrDefault(p => p.Id == id);
+    return profile is not null ? Results.Ok(profile) : Results.NotFound();
+});
 
 
 // the "profiles" list is full of these objects
