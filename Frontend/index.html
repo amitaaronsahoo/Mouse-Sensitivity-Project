@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Aim &amp; Sensitivity Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Game Aim &amp; Sensitivity Tracker</h1>
+      <p class="subtitle">Keep every game's sensitivity settings in one place.</p>
+    </header>
+
+    <!-- Profile form: same form is reused for both "add" and "edit" -->
+    <form id="profile-form">
+      <input type="hidden" id="profile-id" />
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="game-name">Game Name</label>
+          <input type="text" id="game-name" required />
+        </div>
+
+        <div class="field">
+          <label for="fov">Field of View</label>
+          <input type="number" id="fov" required />
+        </div>
+
+        <div class="field">
+          <label for="dpi">Mouse DPI</label>
+          <input type="number" id="dpi" required />
+        </div>
+
+        <div class="field">
+          <label for="sensitivity">In-Game Sensitivity</label>
+          <input type="number" step="0.001" id="sensitivity" required />
+        </div>
+
+        <div class="field">
+          <label for="cm-per-360">cm / 360&deg;</label>
+          <input type="number" step="0.01" id="cm-per-360" required />
+        </div>
+
+        <div class="field field-wide">
+          <label for="notes">Notes</label>
+          <input type="text" id="notes" placeholder="Optional" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" id="submit-btn">Save Profile</button>
+        <button type="button" id="cancel-btn" class="secondary hidden">Cancel Edit</button>
+      </div>
+    </form>
+
+    <table id="profiles-table">
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>FOV</th>
+          <th>DPI</th>
+          <th>Sensitivity</th>
+          <th>cm/360</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="profiles-body">
+        <!-- Rows are rendered here by app.js -->
+      </tbody>
+    </table>
+    <p id="empty-state" class="hidden">No profiles yet. Add one above.</p>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
